@@ -152,6 +152,43 @@ try:
     dd = Select(passenger_gender)
     dd.select_by_visible_text("Male")
     
+    phone_number = driver.find_element(By.XPATH,"//input[@id='mobileNumber']")
+    phone_number.clear()
+    phone_number.send_keys('8179155683')
+
+    upi_radio = driver.find_element(By.XPATH,"//span[@class='ui-radiobutton-icon ui-clickable']")
+    upi_radio.click()
+
+    continue_with_payment = driver.find_element(By.XPATH,"//button[@class='train_Search btnDefault']")
+    continue_with_payment.click()
+
+    time.sleep(20)
+
+
+    #enter captcha
+    #################################
+    captcha = driver.find_element(By.XPATH,"//img[@class='captcha-img']")
+    time.sleep(10)
+
+    continue_butt = driver.find_element(By.XPATH,"//button[@class='btnDefault train_Search']")
+    continue_butt.click()
+
+
+    time.sleep(10)
+    ##################################
+    #payment
+    multi_payrazr = driver.find_element(By.XPATH,"//span[normalize-space()='Multiple Payment Service']")
+    multi_payrazr.click()
+
+
+
+    ##
+    razr = wait.until(EC.presence_of_element_located((By.XPATH, f"//*[contains(text(), 'Razorpay')]")))
+    razr.click()
+
+
+    paynbook = driver.find_element(By.XPATH,"//button[@class='btn btn-primary hidden-xs ng-star-inserted']")
+    paynbook.click()
 
     
     print("found")
