@@ -77,42 +77,12 @@ search_button = driver.find_element(By.XPATH,"(//button[normalize-space()='Searc
 search_button.click()
 
 
-
-
-
-# # find_train_div = driver.find_element(By.XPATH,'')
-
-# try:
-#     # Wait until the text is present
-#     text_to_find = " VIVEK EXPRESS (22504)"
-#     wait = WebDriverWait(driver, 10)
-#     text_element = WebDriverWait(driver, 10).until(
-#         # EC.presence_of_element_located((By.XPATH, f"//p[contains(text(), '{text_to_find}')]"))
-#         train_element = driver.find_element(By.XPATH, f"//*[contains(text(), '{text_to_find}')]")
-#     )
-#     # train_element = driver.find_element(By.XPATH, f"//*[contains(text(), '{text_to_find}')]")
-
-#     print("found")
-
-#     # Click the button
-
-# finally:
-#     # Close the WebDriver
-#     driver.quit()
-
-
-# text_to_find = "22504"
-# WebDriverWait(driver,15).until(
-#     EC.presence_of_element_located((By.XPATH, f"//*[contains(text(), '{text_to_find}')]"))
-# )
-
 def highlight_element(driver, element):
     """Highlights (blinks) a Selenium WebDriver element."""
     driver.execute_script("arguments[0].style.border='3px solid red'", element)
 
 try:
-    # Wait until the specific element is present (adjust the selector as needed)
-    wait = WebDriverWait(driver, 10)  # 10 seconds timeout
+    wait = WebDriverWait(driver, 20)  # 10 seconds timeout
 
     # Locate the specific text (e.g., 'text')
     text_to_find = "22504"
@@ -127,7 +97,7 @@ try:
 
     # # Click the button
     ac_3_tier.click()
-    time.sleep(2)
+    time.sleep(1)
 
     ac_3_tier_again = driver.find_element(locate_with(By.XPATH, f"//*[contains(text(), '3A')]").below(text_element))
     seat_button = driver.find_element(locate_with(By.XPATH, f"//*[contains(text(), '31')]").below(ac_3_tier_again))
@@ -140,9 +110,9 @@ try:
     bookbutton.click()
 
 
-    time.sleep(2)
-
-    passenger_name = driver.find_element(By.XPATH,"//input[@placeholder='Passenger Name']")
+    # time.sleep(2)
+    passenger_name = wait.until(EC.presence_of_element_located((By.XPATH,"//input[@placeholder='Passenger Name']")))
+    # passenger_name = driver.find_element(By.XPATH,"//input[@placeholder='Passenger Name']")
     passenger_name.send_keys("Jada Avinash")
 
     passenger_age = driver.find_element(By.XPATH,"//input[@placeholder='Age']")
@@ -162,22 +132,26 @@ try:
     continue_with_payment = driver.find_element(By.XPATH,"//button[@class='train_Search btnDefault']")
     continue_with_payment.click()
 
-    time.sleep(20)
+    # time.sleep(20)
 
 
     #enter captcha
     #################################
-    captcha = driver.find_element(By.XPATH,"//img[@class='captcha-img']")
+    captcha = wait.until(EC.presence_of_element_located((By.XPATH,"//img[@class='captcha-img']")))
+    # captcha = driver.find_element(By.XPATH,"//img[@class='captcha-img']")
     time.sleep(10)
 
     continue_butt = driver.find_element(By.XPATH,"//button[@class='btnDefault train_Search']")
     continue_butt.click()
 
 
-    time.sleep(10)
+    # time.sleep(10)
     ##################################
     #payment
-    multi_payrazr = driver.find_element(By.XPATH,"//span[normalize-space()='Multiple Payment Service']")
+    multi_payrazr = wait.until(EC.presence_of_element_located((By.XPATH,"(//span[normalize-space()='Multiple Payment Service'])[1]")))
+    highlight_element(driver, multi_payrazr)
+    # multi_payrazr = driver.find_element(By.XPATH,"//span[normalize-space()='Multiple Payment Service']")
+    # multi_payrazr = wait.until(EC.presence_of_element_located((By.XPATH,"//span[normalize-space()='Multiple Payment Service']")))
     multi_payrazr.click()
 
 
@@ -187,8 +161,8 @@ try:
     razr.click()
 
 
-    paynbook = driver.find_element(By.XPATH,"//button[@class='btn btn-primary hidden-xs ng-star-inserted']")
-    paynbook.click()
+    # paynbook = driver.find_element(By.XPATH,"//button[@class='btn btn-primary hidden-xs ng-star-inserted']")
+    # paynbook.click()
 
     
     print("found")
@@ -206,4 +180,4 @@ except Exception as e:
 
 time.sleep(10)
 
-driver.quit()
+# driver.quit()
