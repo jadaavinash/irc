@@ -7,15 +7,26 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support import relative_locator
 from selenium.webdriver.support.relative_locator import locate_with
 from selenium.webdriver.support.select import Select
-
+import cv2
+import base64
+import numpy as np
 import time
+from detect import bringbro
+
+
+
 
 
 options = Options()
+options.add_experimental_option("detach", True)
 options.add_argument('--ignore-certificate-errors')
 options.add_argument('--ignore-ssl-errors')
 options.add_argument('--disable-web-security')
-driver = webdriver.Chrome()
+options.add_argument("--disable-notifications")  # Disable notifications
+options.add_experimental_option(
+    "prefs", {"profile.default_content_setting_values.notifications": 2}
+)
+driver = webdriver.Chrome(options= options)
 
 
 driver.maximize_window()
@@ -34,39 +45,87 @@ time.sleep(2)
 
 username = 'jadaavinash'
 pwd = 'Avn#@1011'
-login_username = driver.find_element(By.CLASS_NAME,"form-control")
+login_username = driver.find_element(By.CSS_SELECTOR, 'input[formcontrolname="userid"]')
 login_username.send_keys(username)
 
-login_password = driver.find_element(By.XPATH,"/html[1]/body[1]/app-root[1]/app-home[1]/div[3]/app-login[1]/p-dialog[1]/div[1]/div[1]/div[2]/div[2]/div[1]/div[2]/div[2]/div[2]/form[1]/div[2]/input[1]")
+login_password = driver.find_element(By.CSS_SELECTOR, 'input[formcontrolname="password"]')
 login_password.send_keys(pwd)
 
 
 
-time.sleep(10)
+
+def captcha():
+    image_element = driver.find_element(By.CLASS_NAME, 'captcha-img')  # Adjust locator
+    img_url = image_element.get_attribute('src')
+
+    base64_str = img_url.split(",")[1]
+    image_data = base64.b64decode(base64_str)
+
+
+    np_array = np.frombuffer(image_data, np.uint8)
+        
+    #     # Convert numpy array to an OpenCV image
+    image = cv2.imdecode(np_array, cv2.IMREAD_COLOR)
+
+
+        # Pass the image to the bringbro function
+    input_element = driver.find_element(By.ID, "captcha")
+    input_element.send_keys(bringbro(image))
+
+# captcha()
+
+while True:
+    captcha()  # Attempt to solve the captcha
+    time.sleep(1)
+    try:
+        # Check for "Invalid Captcha" message
+        
+        driver.find_element(By.XPATH, f"//*[contains(text(), 'Invalid Captcha...')]")
+        print("Invalid captcha detected, retrying...")
+        time.sleep(1)
+    except:
+        # If no "Invalid Captcha" message, break the loop
+        print("Captcha solved successfully!")
+        time.sleep(1)
+        break
+
+
+
+
+
+# time.sleep(10)
+
+
+
+
+
+
+date_element = driver.find_element(By.CSS_SELECTOR, 'p-calendar[formcontrolname="journeyDate"] span > input')
+date_element.clear()
+# date_element.click()
+date_element.send_keys("05/01/2025")
 
 
 
 origin_element = driver.find_element(By.XPATH,'//*[@id="origin"]/span/input')
-origin_element.send_keys("VISAKHAPATNAM - VSKP (VISAKHAPATNAM)")
+# origin_element.send_keys("VISAKHAPATNAM - VSKP (VISAKHAPATNAM)")
+origin_element.send_keys("DUVVADA - DVD (VISAKHAPATNAM)")
+
+
 
 
 destination_element = driver.find_element(By.XPATH,'//*[@id="destination"]/span/input')
 destination_element.send_keys("KATPADI JN - KPD (VELLORE)")
 
-# date_element = driver.find_element(By.XPATH,'//*[@id="jDate"]/span/input')
-# date_element.clear()
-# date_element.send_keys("02/07/2024")
+date_element.send_keys("05/01/2025")
 
 
-date_element = driver.find_element(By.XPATH,'//*[@id="jDate"]/span/input')
-date_element.click()
-# date_elementq = driver.find_element(By.XPATH,'//*[@id="jDate"]/span/div/div/div[2]/table/tbody/tr[2]/td[3]/a')
-date_elementq = driver.find_element(By.XPATH,"//a[normalize-space()='31']")
-date_elementq.click()
-
+fake_element = driver.find_element(By.CLASS_NAME,"loginhead")
+fake_element.click()
 
 booking_type = driver.find_element(By.XPATH,'//*[@id="journeyQuota"]/div')
 booking_type.click()
+
 
 tatkal = driver.find_element(By.XPATH,'//*[@id="journeyQuota"]/div/div[4]/div/ul/p-dropdownitem[1]/li')
 tatkal.click()
@@ -76,6 +135,7 @@ tatkal.click()
 search_button = driver.find_element(By.XPATH,"(//button[normalize-space()='Search'])[1]")
 search_button.click()
 
+time.sleep(1)
 
 def highlight_element(driver, element):
     """Highlights (blinks) a Selenium WebDriver element."""
@@ -85,13 +145,9 @@ try:
     wait = WebDriverWait(driver, 20)  # 10 seconds timeout
 
     # Locate the specific text (e.g., 'text')
-    text_to_find = "22504"
+    text_to_find = "06088"
     text_element = wait.until(EC.presence_of_element_located((By.XPATH, f"//*[contains(text(), '{text_to_find}')]")))
-
-    # container_div = text_element.find_element(By.XPATH, "./ancestor::div[contains(@class, 'ng-star-inserted')]")
-
-    # ac_3_tier = container_div.find_element(By.XPATH, ".//strong[contains(text(), 'AC 3 Tier')]")
-    text_to_find2 = 'AC 3 Tier'
+    text_to_find2 = 'AC 3 Economy'
     ac_3_tier = driver.find_element(locate_with(By.XPATH, f"//*[contains(text(), '{text_to_find2}')]").below(text_element))
 
 
@@ -99,8 +155,9 @@ try:
     ac_3_tier.click()
     time.sleep(1)
 
-    ac_3_tier_again = driver.find_element(locate_with(By.XPATH, f"//*[contains(text(), '3A')]").below(text_element))
-    seat_button = driver.find_element(locate_with(By.XPATH, f"//*[contains(text(), '31')]").below(ac_3_tier_again))
+    ac_3_tier_again = driver.find_element(locate_with(By.XPATH, f"//*[contains(text(), '3E')]").below(text_element))
+    time.sleep(1)
+    seat_button = driver.find_element(locate_with(By.XPATH, f"//*[contains(text(), '05')]").below(ac_3_tier_again))
 
     highlight_element(driver, ac_3_tier_again)
 
@@ -111,14 +168,14 @@ try:
 
 
     # time.sleep(2)
-    passenger_name = wait.until(EC.presence_of_element_located((By.XPATH,"//input[@placeholder='Passenger Name']")))
+    passenger_name = wait.until(EC.presence_of_element_located((By.XPATH, "//p-autocomplete[@field='masterPassengerName']//input[@placeholder='Name']")))
     # passenger_name = driver.find_element(By.XPATH,"//input[@placeholder='Passenger Name']")
     passenger_name.send_keys("Jada Avinash")
 
     passenger_age = driver.find_element(By.XPATH,"//input[@placeholder='Age']")
     passenger_age.send_keys('20')
 
-    passenger_gender = driver.find_element(By.XPATH,'//*[@id="ui-panel-12-content"]/div/div[1]/div[2]/div/app-passenger/div/div[1]/span/div[3]/select')
+    passenger_gender = driver.find_element(By.XPATH,'/html[1]/body[1]/app-root[1]/app-home[1]/div[3]/div[1]/app-passenger-input[1]/div[6]/form[1]/div[1]/div[1]/div[6]/p-panel[1]/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/app-passenger[1]/div[1]/div[1]/span[1]/div[3]/select[1]')
     dd = Select(passenger_gender)
     dd.select_by_visible_text("Male")
     
@@ -126,7 +183,7 @@ try:
     phone_number.clear()
     phone_number.send_keys('8179155683')
 
-    upi_radio = driver.find_element(By.XPATH,"//span[@class='ui-radiobutton-icon ui-clickable']")
+    upi_radio = driver.find_element(By.XPATH,"/html[1]/body[1]/app-root[1]/app-home[1]/div[3]/div[1]/app-passenger-input[1]/div[6]/form[1]/div[1]/div[1]/div[14]/p-panel[1]/div[1]/div[2]/div[1]/table[1]/tr[2]/label[1]/p-radiobutton[1]/div[1]/div[2]/span[1]")
     upi_radio.click()
 
     continue_with_payment = driver.find_element(By.XPATH,"//button[@class='train_Search btnDefault']")
@@ -135,37 +192,51 @@ try:
     # time.sleep(20)
 
 
-    #enter captcha
+    def s_captcha():
+        image_element = driver.find_element(By.CLASS_NAME, 'captcha-img')  # Adjust locator
+        img_url = image_element.get_attribute('src')
+
+        base64_str = img_url.split(",")[1]
+        image_data = base64.b64decode(base64_str)
+
+
+        np_array = np.frombuffer(image_data, np.uint8)
+            
+        #     # Convert numpy array to an OpenCV image
+        image = cv2.imdecode(np_array, cv2.IMREAD_COLOR)
+
+
+            # Pass the image to the bringbro function
+        input_element = driver.find_element(By.ID, "captcha")
+        input_element.send_keys(bringbro(image))
+
     #################################
     captcha = wait.until(EC.presence_of_element_located((By.XPATH,"//img[@class='captcha-img']")))
     # captcha = driver.find_element(By.XPATH,"//img[@class='captcha-img']")
-    time.sleep(10)
+    # time.sleep(10)
+
+    
+    while True:
+        s_captcha()  # Attempt to solve the captcha
+        time.sleep(1)
+        try:
+            # Check for "Invalid Captcha" message
+            
+            driver.find_element(By.XPATH, f"//*[contains(text(), 'Invalid Captcha')]")
+            print("Invalid captcha detected, retrying...")
+        except:
+            # If no "Invalid Captcha" message, break the loop
+            print("Captcha solved successfully!")
+            break
+
+
+
+
+
 
     continue_butt = driver.find_element(By.XPATH,"//button[@class='btnDefault train_Search']")
     continue_butt.click()
 
-
-    # time.sleep(10)
-    ##################################
-    #payment
-    multi_payrazr = wait.until(EC.presence_of_element_located((By.XPATH,"(//span[normalize-space()='Multiple Payment Service'])[1]")))
-    highlight_element(driver, multi_payrazr)
-    # multi_payrazr = driver.find_element(By.XPATH,"//span[normalize-space()='Multiple Payment Service']")
-    # multi_payrazr = wait.until(EC.presence_of_element_located((By.XPATH,"//span[normalize-space()='Multiple Payment Service']")))
-    multi_payrazr.click()
-
-
-
-    ##
-    razr = wait.until(EC.presence_of_element_located((By.XPATH, f"//*[contains(text(), 'Razorpay')]")))
-    razr.click()
-
-
-    # paynbook = driver.find_element(By.XPATH,"//button[@class='btn btn-primary hidden-xs ng-star-inserted']")
-    # paynbook.click()
-
-    
-    print("found")
 
 except Exception as e:
     print(f"An error occurred: {e}")
@@ -181,3 +252,4 @@ except Exception as e:
 time.sleep(10)
 
 # driver.quit()
+
