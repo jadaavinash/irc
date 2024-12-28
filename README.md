@@ -2,6 +2,9 @@
 
 This project automates the process of booking train tickets on the [IRCTC website](https://www.irctc.co.in/nget/train-search) using Selenium and Python. It includes functionality to log in, fill out journey details, solve captchas, and complete the booking process.
 
+## Video Demonstration
+https://github.com/user-attachments/assets/47bbb137-4dc8-4d6e-895f-198774ac0fc6
+
 ## Features
 - Automated login with username and password.
 - Automated captcha handling function.
@@ -57,9 +60,6 @@ python irctc_automation.py
 - Ensure your IRCTC credentials and journey details are correctly updated in the script.
 - The script uses ChromeDriver; update the version if your Chrome browser updates.
 - Some captchas may not be solvable automatically due to complexity. Adjust the `bringbro` function if needed.
-
-## Video Demonstration
-Watch the [demonstration video](./video/demo.mkv) to see the automation script in action.
 
 ## Contributing
 Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/yourusername/irctc-booking-automation/issues).
