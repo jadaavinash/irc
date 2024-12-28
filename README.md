@@ -59,7 +59,7 @@ python irctc_automation.py
 - Some captchas may not be solvable automatically due to complexity. Adjust the `bringbro` function if needed.
 
 ## Video Demonstration
-Watch the [demonstration video](./video/demo.mp4) to see the automation script in action.
+Watch the [demonstration video](./video/demo.mkv) to see the automation script in action.
 
 ## Contributing
 Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/yourusername/irctc-booking-automation/issues).
