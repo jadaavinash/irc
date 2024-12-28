@@ -234,8 +234,8 @@ try:
 
 
 
-    continue_butt = driver.find_element(By.XPATH,"//button[@class='btnDefault train_Search']")
-    continue_butt.click()
+    # continue_butt = driver.find_element(By.XPATH,"//button[@class='btnDefault train_Search']")
+    # continue_butt.click()
 
 
 except Exception as e:
@@ -249,7 +249,7 @@ except Exception as e:
 
 
 
-time.sleep(10)
+# time.sleep(10)
 
 # driver.quit()
 
