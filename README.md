@@ -26,8 +26,8 @@ https://github.com/user-attachments/assets/47bbb137-4dc8-4d6e-895f-198774ac0fc6
 Clone the project repository from GitHub:
 
 ```bash
-git clone https://github.com/yourusername/irctc-booking-automation.git
-cd irctc-booking-automation
+git clone https://github.com/jadaavinashe/irc.git
+cd irc
 ```
 
 ### Step 2: Set Up ChromeDriver
@@ -47,11 +47,11 @@ Update the `username` and `pwd` variables in the script with your IRCTC login cr
 Execute the script using Python:
 
 ```bash
-python irctc_automation.py
+python irctc.py
 ```
 
 ## Files
-- **irctc_automation.py**: Main script for automation.
+- **irctc.py**: Main script for automation.
 - **detect.py**: Contains the function for solving captchas.
 - **video/**: Folder containing a demonstration video of the automation.
 - **requirements.txt**: Lists the required Python libraries.
